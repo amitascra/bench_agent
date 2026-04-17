@@ -57,11 +57,11 @@ class Monitor(Server):
         self.generate_prometheus_domains_config(targets["domains"])
 
     def fetch_targets(self):
-        press_url = self.config.get("press_url")
-        press_token = self.config.get("press_token")
+        bench_manager_url = self.config.get("press_url")
+        bench_manager_token = self.config.get("press_token")
         return requests.post(
-            f"{press_url}/api/method/press.api.monitoring.targets",
-            data={"token": press_token},
+            f"{bench_manager_url}/api/method/bench_manager.api.monitoring.targets",
+            data={"token": bench_manager_token},
         ).json()["message"]
 
     def generate_prometheus_sites_config(self, benches):

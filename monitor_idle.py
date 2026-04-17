@@ -49,7 +49,7 @@ class IdleMonitor:
         """Let the master know of idle benches"""
         try:
             requests.post(
-                f"{self.config['press_url']}/api/method/press.api.server.benches_are_idle",
+                f"{self.config['press_url']}/api/method/bench_manager.api.server.benches_are_idle",
                 data={"server": self.config["name"], "access_token": self.config["access_token"]},
                 timeout=10,
             )

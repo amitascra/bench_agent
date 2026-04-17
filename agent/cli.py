@@ -11,7 +11,6 @@ import click
 import requests
 
 from agent.bench import Bench
-from agent.proxy import Proxy
 from agent.server import Server
 from agent.site import Site
 from agent.utils import get_timestamp
@@ -87,7 +86,7 @@ def config(name, user, workers, job_timeout, proxy_ip=None, sentry_dsn=None, pre
         "workers": workers,
         "gunicorn_workers": 2,
         "web_port": 25052,
-        "press_url": "https://frappecloud.com",
+        "press_url": "http://bench.amitkumar.live",
         "db_port": db_port,
         "job_timeout": job_timeout,
     }
@@ -139,19 +138,6 @@ def supervisor():
 @setup.command()
 def nginx():
     Server().setup_nginx()
-
-
-@setup.command()
-@click.option("--domain")
-@click.option("--press-url")
-def proxy(domain=None, press_url=None):
-    proxy = Proxy()
-    if domain:
-        config = proxy.get_config(for_update=True)
-        config["domain"] = domain
-        config["press_url"] = press_url
-        proxy.set_config(config, indent=4)
-    proxy.setup_proxy()
 
 
 @setup.command()

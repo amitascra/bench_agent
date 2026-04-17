@@ -41,7 +41,7 @@ server {
 	# required to avoid HTTP 411: see Issue #1486 (https://github.com/moby/moby/issues/1486)
 	chunked_transfer_encoding on;
 
-	# Allow press signup pages to check browser-proxy latency
+	# Allow Bench Manager signup pages to check browser-proxy latency
 	{% if press_url -%}
 	more_set_headers "Access-Control-Allow-Origin: {{ press_url }}";
 	{%- endif %}

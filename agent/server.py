@@ -15,18 +15,10 @@ from jinja2 import Environment, PackageLoader
 from passlib.hash import pbkdf2_sha256 as pbkdf2
 from peewee import MySQLDatabase
 
-from agent.application_storage_analyzer import (
-    analyze_benches_structure,
-    format_size,
-    parse_docker_df_output,
-    parse_total_disk_usage_output,
-    to_bytes,
-)
 from agent.base import AgentException, Base
 from agent.bench import Bench
 from agent.exceptions import BenchNotExistsException, RegistryDownException
 from agent.job import Job, Step, job, step
-from agent.nfs_handler import NFSHandler
 from agent.patch_handler import run_patches
 from agent.site import Site
 from agent.utils import get_supervisor_processes_status, is_registry_healthy
@@ -54,7 +46,7 @@ class Server(Base):
 
     @property
     def press_url(self):
-        return self.config.get("press_url", "https://frappecloud.com")
+        return self.config.get("press_url", "http://bench.amitkumar.live")
 
     def docker_login(self, registry):
         url = registry["url"]
@@ -911,16 +903,6 @@ class Server(Base):
         supervisor_status = get_supervisor_processes_status()
         if restart_redis or supervisor_status.get("redis") != "RUNNING":
             self.execute("sudo supervisorctl start agent:redis")
-
-        if is_proxy_server:
-            from agent.proxy import Proxy
-
-            # Call proxy setup to re-generate configuration
-            proxy = Proxy()
-            proxy.setup_proxy()
-
-            # Start NGINX Reload Manager if it's a proxy server
-            self.execute("sudo supervisorctl start agent:nginx_reload_manager")
 
         if restart_rq_workers:
             for i in range(self.config["workers"]):
