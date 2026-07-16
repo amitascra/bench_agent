@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import platform
+import shlex
 import shutil
 import subprocess
 import tempfile
@@ -49,9 +50,9 @@ class Server(Base):
         return self.config.get("press_url", "http://bench.amitkumar.live")
 
     def docker_login(self, registry):
-        url = registry["url"]
-        username = registry["username"]
-        password = registry["password"]
+        url = shlex.quote(registry["url"])
+        username = shlex.quote(registry["username"])
+        password = shlex.quote(registry["password"])
         return self.execute(f"docker login -u {username} -p {password} {url}")
 
     def establish_connection_with_registry(self, max_retries: int, registry: dict[str, str]):
@@ -132,7 +133,7 @@ class Server(Base):
         """
         for attempt in range(max_retries):
             try:
-                self.execute(f"docker inspect {name}")
+                self.execute(f"docker inspect {shlex.quote(name)}")
             except AgentException:
                 break  # container does not exist
             else:
