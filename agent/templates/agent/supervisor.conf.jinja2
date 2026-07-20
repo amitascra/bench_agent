@@ -31,26 +31,13 @@ stderr_logfile={{ directory }}/logs/worker.error.log
 user={{ user }}
 directory={{ directory }}
 
-{% if is_proxy_server or is_standalone %}
-[program:nginx_reload_manager]
-command=bash -c "{{ directory }}/repo/wait-for-it.sh redis://127.0.0.1:{{ redis_port }} && exec {{directory}}/env/bin/python {{ directory }}/repo/agent/nginx_reload_manager.py"
-environment=PYTHONUNBUFFERED=1
-autostart=true
-autorestart=true
-stopwaitsecs=20
-stdout_logfile={{ directory }}/logs/nginx_reload_manager.log
-stderr_logfile={{ directory }}/logs/nginx_reload_manager.error.log
-user={{ user }}
-directory={{ directory }}
-{% endif %}
-
+{# nginx_reload_manager program removed: agent/nginx_reload_manager.py does
+   not exist in this simplified fork (dropped when the agent was slimmed for
+   Bench Manager integration, its supervisor entry was left behind) - when
+   is_proxy_server/is_standalone rendered it, supervisor started a program
+   whose script was missing and it went FATAL on every such VM. Nginx reloads
+   here are direct (Server._reload_nginx -> systemctl reload nginx), nothing
+   consumes the reload-queue this manager served in upstream Press. #}
 [group:agent]
 
-{% set programs = "web, redis, worker" %}
-
-{% if is_proxy_server or is_standalone %}
-    {% set programs = programs + ", nginx_reload_manager" %}
-{% endif %}
-
-
-programs={{ programs }}
+programs=web, redis, worker
