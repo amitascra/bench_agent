@@ -2,81 +2,207 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Frappe Cloud</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Worf Cloud</title>
         <style>
+            :root {
+                color-scheme: light;
+                --accent-50: #EEF2FF;
+                --accent-100: #E0E7FF;
+                --accent-500: #6366F1;
+                --accent-600: #4F46E5;
+                --accent-700: #4338CA;
+                --violet-500: #8B5CF6;
+                --gray-50: #F9FAFB;
+                --gray-100: #F3F4F6;
+                --gray-200: #E5E7EB;
+                --gray-400: #9CA3AF;
+                --gray-500: #6B7280;
+                --gray-600: #4B5563;
+                --gray-700: #374151;
+                --gray-900: #111827;
+            }
+
+            * { box-sizing: border-box; }
+
             html {
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
             }
+
             body {
+                margin: 0;
+                min-height: 100vh;
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-                color: #1A4469;
-                background-color: #F9FAFA;
+                color: var(--gray-700);
+                background: var(--gray-50);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem 1rem;
             }
 
             .container {
-                padding-top: 4rem;
-                max-width: 768px;
-                margin: 0 auto;
+                width: 100%;
+                max-width: 30rem;
             }
 
             .logo {
-                text-align: center;
                 display: flex;
-                justify-content: center;
                 align-items: center;
+                justify-content: center;
+                gap: 0.625rem;
+                margin-bottom: 1.75rem;
             }
 
-            .logo svg {
-                height: 2rem;
-            }
+            .logo svg { height: 1.75rem; width: auto; }
 
-            .logo h1 {
-                font-size: 18px;
+            .logo span {
+                font-size: 17px;
                 font-weight: 600;
-                color: #171717;
+                color: var(--gray-900);
+                letter-spacing: -0.01em;
             }
 
-            .message-container {
-                width: 24rem;
-                margin: 0 auto;
-                background-color: white;
-                padding: 2.5rem;
-                margin-top: 1.5rem;
-                -webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                font-size: 13px;
+            .card {
+                background: #FFFFFF;
+                border: 1px solid var(--gray-200);
+                border-radius: 0.75rem;
+                padding: 2.25rem 2rem;
                 text-align: center;
-                border-radius: 0.375rem;
+                box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04), 0 8px 24px -8px rgba(17, 24, 39, 0.08);
             }
 
-            .alert-icon svg {
-                height: 2rem;
-                width: 2rem;
+            .alert-icon {
+                width: 3rem;
+                height: 3rem;
+                margin: 0 auto 1.25rem;
+                border-radius: 9999px;
+                background: var(--accent-50);
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
+
+            .alert-icon svg { width: 1.5rem; height: 1.5rem; }
 
             h1 {
-                font-size: 16px;
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--gray-900);
+                margin: 0 0 0.5rem;
+                letter-spacing: -0.01em;
+            }
+
+            p.message {
+                font-size: 14px;
+                color: var(--gray-500);
+                line-height: 1.6;
+                margin: 0 0 1.75rem;
+            }
+
+            .actions {
+                display: flex;
+                flex-direction: column;
+                gap: 0.625rem;
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.4rem;
+                width: 100%;
+                padding: 0.625rem 1rem;
+                border-radius: 0.5rem;
+                font-size: 14px;
                 font-weight: 500;
-            }
-
-            p {
-                color: #4C5A67;
-                line-height: 1.5;
-            }
-
-            a {
-                color: #1579D0;
                 text-decoration: none;
-                border-bottom: 1px solid #1579D0;
+                border: 1px solid transparent;
+                transition: background-color 0.15s ease, border-color 0.15s ease;
+                cursor: pointer;
             }
+
+            .btn-primary {
+                background: var(--accent-600);
+                color: #FFFFFF;
+            }
+            .btn-primary:hover { background: var(--accent-700); }
+
+            .btn-secondary {
+                background: #FFFFFF;
+                color: var(--gray-700);
+                border-color: var(--gray-200);
+            }
+            .btn-secondary:hover { background: var(--gray-50); }
+
+            .btn svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+
+            .details {
+                margin-top: 1.5rem;
+                text-align: left;
+            }
+
+            .details summary {
+                cursor: pointer;
+                font-size: 12.5px;
+                font-weight: 500;
+                color: var(--gray-500);
+                list-style: none;
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+                user-select: none;
+            }
+            .details summary::-webkit-details-marker { display: none; }
+            .details summary .chevron {
+                width: 0.75rem;
+                height: 0.75rem;
+                transition: transform 0.15s ease;
+            }
+            .details[open] summary .chevron { transform: rotate(90deg); }
+            .details summary:hover { color: var(--gray-700); }
+
+            .details-body {
+                margin-top: 0.75rem;
+                background: var(--gray-50);
+                border: 1px solid var(--gray-200);
+                border-radius: 0.5rem;
+                padding: 0.75rem 0.875rem;
+                font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+                font-size: 12px;
+                color: var(--gray-600);
+            }
+
+            .detail-row {
+                display: flex;
+                justify-content: space-between;
+                gap: 1rem;
+                padding: 0.25rem 0;
+            }
+            .detail-row + .detail-row { border-top: 1px dashed var(--gray-200); }
+            .detail-row dt { color: var(--gray-400); }
+            .detail-row dd { margin: 0; color: var(--gray-700); word-break: break-all; text-align: right; }
+
+            .footer-link {
+                margin-top: 1.5rem;
+                text-align: center;
+                font-size: 12.5px;
+                color: var(--gray-400);
+            }
+            .footer-link a {
+                color: var(--gray-500);
+                text-decoration: none;
+                border-bottom: 1px solid var(--gray-200);
+            }
+            .footer-link a:hover { color: var(--accent-600); border-color: var(--accent-600); }
         </style>
     </head>
 
     <body>
         <div class="container">
             <div class="logo">
-                <svg width="40" height="100" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="28" height="28" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M93.4626 0H23.5665C10.5511 0 0 10.5511 0 23.5665V93.4626C0 106.478 10.5511 117.029 23.5665 117.029H93.4626C106.478 117.029 117.029 106.478 117.029 93.4626V23.5665C117.029 10.5511 106.478 0 93.4626 0Z"
                         fill="url(#paint0_radial_0_9)" />
@@ -91,25 +217,88 @@
                         </radialGradient>
                     </defs>
                 </svg>
-                <div class="logo-text">
-                    <h1>Frappe Cloud</h1>
-                </div>
+                <span>Worf Cloud</span>
             </div>
-            <div class="message-container">
+
+            <div class="card">
                 <div class="alert-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M4.00288 21.3966C2.47791 21.3966 1.51397 19.7584 2.25456 18.4253L10.2527 4.02871C11.0147 2.65709 12.9873 2.6571 13.7493 4.02872L21.7474 18.4253C22.488 19.7584 21.524 21.3966 19.9991 21.3966H4.00288ZM11.9991 18.4126C12.5688 18.4126 13.0307 17.9507 13.0307 17.381C13.0307 16.8113 12.5688 16.3495 11.9991 16.3495C11.4294 16.3495 10.9675 16.8113 10.9675 17.381C10.9675 17.9507 11.4294 18.4126 11.9991 18.4126ZM13 8.8601C13 8.30782 12.5523 7.8601 12 7.8601C11.4477 7.8601 11 8.30782 11 8.8601V13.9074C11 14.4597 11.4477 14.9074 12 14.9074C12.5523 14.9074 13 14.4597 13 13.9074V8.8601Z"
                             fill="#D6932E" />
                     </svg>
                 </div>
-                <h1>
-                    Are you lost?
-                </h1>
-                <p class="message">
-                    Why don't you start over from <a href="https://frappecloud.com">Frappe Cloud</a>.
+
+                <h1>This site isn't ready yet</h1>
+                <p class="message" id="lead-message">
+                    Either this address doesn't point at a site here, or it was created
+                    moments ago and is still finishing setup - that usually clears up
+                    within a minute or two.
                 </p>
+
+                <div class="actions">
+                    <a class="btn btn-primary" href="https://worf.cloud/dashboard">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Go to Dashboard
+                    </a>
+                    <a class="btn btn-secondary" id="retry-btn" href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+                        Retry This Page
+                    </a>
+                </div>
+
+                <details class="details">
+                    <summary>
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        Technical details
+                    </summary>
+                    <div class="details-body">
+                        <dl id="detail-list"></dl>
+                    </div>
+                </details>
             </div>
+
+            <p class="footer-link">
+                Need help? <a href="https://worf.cloud/dashboard">Contact support from your dashboard</a>.
+            </p>
         </div>
+
+        <script>
+            (function () {
+                var host = window.location.hostname;
+                var now = new Date();
+                var pad = function (n) { return String(n).padStart(2, "0"); };
+                var timestamp = now.getUTCFullYear() + "-" + pad(now.getUTCMonth() + 1) + "-" + pad(now.getUTCDate())
+                    + " " + pad(now.getUTCHours()) + ":" + pad(now.getUTCMinutes()) + ":" + pad(now.getUTCSeconds()) + " UTC";
+
+                document.getElementById("lead-message").innerHTML =
+                    "<strong style=\"color:#374151\">" + host + "</strong> either doesn't point at a site "
+                    + "here, or it was created moments ago and is still finishing setup - that usually "
+                    + "clears up within a minute or two.";
+
+                var rows = [
+                    ["Requested host", host],
+                    ["Path", window.location.pathname || "/"],
+                    ["Time", timestamp],
+                ];
+                var list = document.getElementById("detail-list");
+                rows.forEach(function (row) {
+                    var div = document.createElement("div");
+                    div.className = "detail-row";
+                    var dt = document.createElement("dt");
+                    dt.textContent = row[0];
+                    var dd = document.createElement("dd");
+                    dd.textContent = row[1];
+                    div.appendChild(dt);
+                    div.appendChild(dd);
+                    list.appendChild(div);
+                });
+
+                document.getElementById("retry-btn").addEventListener("click", function (e) {
+                    e.preventDefault();
+                    window.location.reload();
+                });
+            })();
+        </script>
     </body>
 </html>
