@@ -167,6 +167,34 @@ def archive_bench(bench):
     return jsonify({"job": job})
 
 
+@application.route("/benches/<string:source>/sites/<string:site>/move", methods=["POST"])
+def move_site_to_bench(source, site):
+    """
+    POST /benches/bench-old/sites/test.frappe.cloud/move
+    {
+        "target": "bench-new",
+        "deactivate": true,
+        "activate": true,
+        "skip_failing_patches": false
+    }
+
+    Moves a site's directory from one bench to another, regenerates nginx on
+    both, then migrates the site inside the target bench. This is what makes a
+    deploy candidate testable and a promotion reversible - the server method
+    already existed but had no route, so nothing could reach it.
+    """
+    data = request.json or {}
+    job = Server().move_site_to_bench(
+        site,
+        source,
+        data["target"],
+        data.get("deactivate", True),
+        data.get("activate", True),
+        data.get("skip_failing_patches", False),
+    )
+    return jsonify({"job": job})
+
+
 @application.route("/benches/<string:bench>/sites", methods=["POST"])
 @validate_bench
 def new_site(bench):
